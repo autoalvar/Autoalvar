@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AUTOS ALVAR</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#0b0b0d;--card:#151518;--line:#26262b;--tx:#f2efe8;--mu:#8f8d88;--gold:#c9a45c;--red:#b8423a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 Inter,system-ui,sans-serif}
+header{text-align:center;padding:56px 20px 32px;border-bottom:1px solid var(--line)}
+h1{font:600 clamp(34px,7vw,56px)/1 'Cormorant Garamond',Georgia,serif;letter-spacing:.28em;margin:0;color:var(--gold)}
+header p{color:var(--mu);margin:12px 0 0;letter-spacing:.2em;font-size:12px;text-transform:uppercase}
+main{max-width:1100px;margin:0 auto;padding:28px 18px 60px}
+.bar{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap}
+.tabs button,.btn{background:none;border:1px solid var(--line);color:var(--tx);padding:9px 16px;border-radius:999px;font:500 13px Inter,sans-serif;cursor:pointer}
+.tabs button.on{border-color:var(--gold);color:var(--gold)}
+.btn.gold{background:var(--gold);color:#111;border-color:var(--gold);font-weight:600}
+.btn.red{color:var(--red);border-color:#3a2220}
+.btn:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.car{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
+.ph{aspect-ratio:16/10;background:#101012;position:relative}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.thumbs{display:flex;gap:6px;padding:8px 14px 0;overflow-x:auto}
+.thumbs img{width:48px;height:34px;object-fit:cover;border-radius:5px;cursor:pointer;opacity:.7;border:1px solid var(--line)}
+.body{padding:14px 18px 18px}
+.body h3{margin:0;font:600 22px 'Cormorant Garamond',Georgia,serif}
+.price{color:var(--gold);font-weight:600;font-size:20px;margin:4px 0 8px}
+.desc{color:var(--mu);white-space:pre-line;margin:0 0 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.car.sold img{filter:grayscale(1) brightness(.55)}
+.car.sold .price{color:var(--mu);text-decoration:line-through}
+.badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-10deg);border:3px solid var(--red);color:var(--red);padding:4px 18px;font:700 26px Inter,sans-serif;letter-spacing:.15em;border-radius:6px;background:#0008}
+.empty{text-align:center;color:var(--mu);padding:70px 0}
+.panel{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;margin-bottom:26px;display:none}
+.panel.open{display:block}
+.panel h2{margin:0 0 14px;font:600 24px 'Cormorant Garamond',Georgia,serif;color:var(--gold)}
+label{display:block;font-size:12px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 5px}
+input,textarea,select{width:100%;background:#0e0e10;border:1px solid var(--line);color:var(--tx);border-radius:8px;padding:11px;font:inherit}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold)}
+.two{display:grid;grid-template-columns:1fr 110px;gap:10px}
+.prev{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.prev img{width:70px;height:50px;object-fit:cover;border-radius:6px}
+#msg{color:var(--mu);font-size:13px;margin-top:10px}
+.cm{border-top:1px solid var(--line);margin:4px 0 14px;padding-top:12px}.cm h4{margin:0 0 8px;font:600 12px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}.m{display:flex;justify-content:space-between;gap:8px;background:#0e0e10;border:1px solid var(--line);border-radius:8px;padding:8px 11px;margin-bottom:6px;font-size:14px;overflow-wrap:anywhere}.x{background:none;border:0;color:var(--red);cursor:pointer}.send{display:flex;gap:8px;margin-top:8px}.send .btn{padding:8px 14px}.wa{display:inline-block;text-decoration:none;margin-bottom:14px;border-color:#25d366;color:#25d366}
+footer{text-align:center;color:var(--mu);font-size:12px;padding:30px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header><h1>AUTOS ALVAR</h1><p>Vehículos seleccionados</p></header>
+<main>
+  <div class="bar">
+    <div class="tabs"><button class="on" data-f="all">Todos</button><button data-f="avail">Disponibles</button><button data-f="sold">Vendidos</button></div>
+    <div class="row"><button class="btn" id="login">Iniciar Sesión (Admin)</button><button class="btn gold" id="addBtn" hidden>+ Subir carro</button></div>
+  </div>
+  <div class="panel" id="lp" style="max-width:380px"><h2>Administrador</h2><input id="pw" type="password" placeholder="Contraseña"><div class="row" style="margin-top:12px"><button class="btn gold" id="lgo">Entrar</button></div><div id="lmsg"></div></div>
+  <div class="panel" id="panel">
+    <h2>Nuevo carro</h2>
+    <label>Título</label><input id="t" placeholder="Toyota Hilux 2019 4x4">
+    <div class="two"><div><label>Precio</label><input id="p" type="number" min="0" placeholder="450000"></div>
+    <div><label>Moneda</label><select id="c"><option>L</option><option>$</option></select></div></div>
+    <label>Descripción</label><textarea id="d" rows="4" placeholder="Año, kilometraje, motor, estado, extras..."></textarea>
+    <label>Fotos</label><input id="f" type="file" accept="image/*" multiple>
+    <div class="prev" id="prev"></div>
+    <div class="row" style="margin-top:16px"><button class="btn gold" id="save">Publicar</button><button class="btn" id="cancel">Cancelar</button></div>
+    <div id="msg"></div>
+  </div>
+  <input id="q" type="search" placeholder="Buscar por marca, modelo o descripción..." style="margin-bottom:22px;border-radius:999px;padding:12px 18px">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" hidden>No hay carros que mostrar.</div>
+</main>
+<footer>© AUTOS ALVAR</footer>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot,query,orderBy} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+// ====== REEMPLAZA ESTOS DATOS CON LOS DE TU PROYECTO DE FIREBASE ======
+const firebaseConfig={
+  apiKey:"TU_API_KEY",
+  authDomain:"TU_PROYECTO.firebaseapp.com",
+  projectId:"TU_PROJECT_ID",
+  storageBucket:"TU_PROYECTO.appspot.com",
+  messagingSenderId:"TU_SENDER_ID",
+  appId:"TU_APP_ID"
+};
+// =======================================================================
+const fbApp=initializeApp(firebaseConfig),db=getFirestore(fbApp),storage=getStorage(fbApp);
+let isOwner=false,cars=[],filter='all',byCar={},drafts={};
+const WA='50495925702',ADMIN_HASH='e34331929cb847ff491b61c01fa07417d98088786e302e97b5eb971108e1db42';
+const wa=c=>c.sold?'':`<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${WA}?text=${encodeURIComponent('Hola, me interesa el '+c.title+' ('+c.cur+' '+Number(c.price).toLocaleString('es-HN')+'). ¿Sigue disponible?')}">Preguntar Disponibilidad</a>`;
+const cm=c=>c.sold?'':`<div class="cm"><h4>Comentarios</h4>${(byCar[c.id]||[]).map(m=>`<div class="m"><span>${esc(m.text)}</span>${isOwner?`<button class="x" data-a="dc" data-m="${m.id}">✕</button>`:''}</div>`).join('')}<div class="send"><input class="ci" maxlength="300" placeholder="Escribe un comentario..." value="${esc(drafts[c.id]||'')}"><button class="btn gold" data-a="send">Enviar</button></div></div>`;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function render(){
+  const n=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(),q=n($('q').value.trim());
+  const list=cars.filter(c=>(filter==='all'||(filter==='sold')===!!c.sold)&&(!q||n(c.title+' '+c.desc).includes(q)));
+  $('empty').hidden=list.length>0;
+  $('grid').innerHTML=list.map(c=>`<article class="car ${c.sold?'sold':''}" data-id="${c.id}">
+    <div class="ph">${c.imgs&&c.imgs[0]?`<img class="main" src="${esc(c.imgs[0])}" alt="${esc(c.title)}">`:''}${c.sold?'<div class="badge">VENDIDO</div>':''}</div>
+    ${c.imgs&&c.imgs.length>1?`<div class="thumbs">${c.imgs.map(u=>`<img src="${esc(u)}" data-t="1">`).join('')}</div>`:''}
+    <div class="body"><h3>${esc(c.title)}</h3><div class="price">${esc(c.cur)} ${Number(c.price).toLocaleString('es-HN')}</div>
+    <p class="desc">${esc(c.desc)}</p>${wa(c)}${cm(c)}
+    ${isOwner?`<div class="row"><button class="btn" data-a="sold">${c.sold?'Marcar disponible':'Marcar vendido'}</button><button class="btn red" data-a="del">Eliminar</button></div>`:''}</div></article>`).join('');
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));render()});
+$('grid').onclick=async e=>{
+  const card=e.target.closest('.car');if(!card)return;
+  if(e.target.dataset.t){card.querySelector('.main').src=e.target.src;return}
+  const c=cars.find(x=>x.id===card.dataset.id);if(!c||!db)return;
+  try{
+    if(e.target.dataset.a==='send'){const inp=card.querySelector('.ci'),text=inp.value.trim();if(!text)return;await addDoc(collection(db,'comments'),{carId:c.id,text,created:Date.now()});drafts[c.id]='';inp.value='';return}
+    if(e.target.dataset.a==='dc'){await deleteDoc(doc(db,'comments',e.target.dataset.m));return}
+    if(e.target.dataset.a==='sold')await updateDoc(doc(db,'cars',c.id),{sold:!c.sold});
+    if(e.target.dataset.a==='del'){if(!e.target.dataset.sure){e.target.dataset.sure=1;e.target.textContent='¿Seguro? Toca otra vez';return}await deleteDoc(doc(db,'cars',c.id))}
+  }catch(err){alert('No se pudo guardar: '+(err.message||err.code))}
+};
+$('grid').oninput=e=>{if(e.target.classList.contains('ci'))drafts[e.target.closest('.car').dataset.id]=e.target.value};
+$('grid').onkeydown=e=>{if(e.key==='Enter'&&e.target.classList.contains('ci'))e.target.closest('.car').querySelector('[data-a=send]').click()};
+$('q').oninput=render;
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function setAdmin(on){isOwner=on;$('addBtn').hidden=!on;$('login').textContent=on?'Cerrar sesión (Admin)':'Iniciar Sesión (Admin)';if(!on)$('panel').classList.remove('open');$('lp').classList.remove('open');render()}
+$('login').onclick=()=>isOwner?setAdmin(false):$('lp').classList.toggle('open');
+$('lgo').onclick=async()=>{let ok=false;try{ok=(await sha($('pw').value))===ADMIN_HASH}catch(e){}if(ok){$('pw').value='';$('lmsg').textContent='';setAdmin(true)}else $('lmsg').textContent='Contraseña incorrecta.'};
+$('pw').onkeydown=e=>{if(e.key==='Enter')$('lgo').click()};
+$('addBtn').onclick=()=>$('panel').classList.toggle('open');
+$('cancel').onclick=()=>$('panel').classList.remove('open');
+$('f').onchange=()=>{$('prev').innerHTML='';[...$('f').files].forEach(f=>{const i=new Image();i.src=URL.createObjectURL(f);$('prev').appendChild(i)})};
+$('save').onclick=async()=>{
+  const title=$('t').value.trim(),price=Number($('p').value);
+  if(!title||!price){$('msg').textContent='Escribe el título y el precio.';return}
+  $('save').disabled=true;$('msg').textContent='Subiendo fotos...';
+  try{
+    const imgs=[];
+    for(const f of $('f').files){const r=ref(storage,'cars/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'-'+f.name.replace(/[^\w.-]/g,'_'));await uploadBytes(r,f);imgs.push(await getDownloadURL(r))}
+    await addDoc(collection(db,'cars'),{title,price,cur:$('c').value,desc:$('d').value.trim(),imgs,sold:false,created:Date.now()});
+    ['t','p','d','f'].forEach(i=>$(i).value='');$('prev').innerHTML='';$('msg').textContent='¡Publicado!';
+    $('panel').classList.remove('open');
+  }catch(err){$('msg').textContent='Error: '+(err.message||err.code||err)}
+  $('save').disabled=false;
+};
+render();
+try{
+  onSnapshot(query(collection(db,'comments'),orderBy('created','asc')),s=>{byCar={};s.docs.forEach(d=>{const m={id:d.id,...d.data()};(byCar[m.carId]=byCar[m.carId]||[]).push(m)});render()},()=>{});
+  onSnapshot(query(collection(db,'cars'),orderBy('created','desc')),s=>{cars=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{$('empty').textContent='No se pudo conectar con Firebase. Revisa firebaseConfig.'});
+}catch(e){$('empty').hidden=false;$('empty').textContent='Revisa tu firebaseConfig.'}
+</script>
+</body>
+</html>
